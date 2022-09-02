@@ -1,0 +1,62 @@
+2022 - 2023 Goals:
+Create readable, useful code:
+	- Create a conventions list that is followed for all code that we write
+	- Create buglist and fix all bugs, don't wait until its a problem at comp to fix
+	- Refactor the current codebase to meet our conventions list requirements
+	- Comment important information to make sense of the code (less of "this is how this works" and more of "this is how we approach this problem and why this is the solution")
+	- Implement release versions, so there is always a clean, fully functional version of the codebase that does not contain any experimental features or anything that has not been extensively tested
+	- Implement lessons learned at the end of every major development cycle (likely a semester-wide cycle) that allows us to acknowledge the good, figure out what needs to be improved, and deal with the effects of what was done poorly productively
+Implementation of a Wiki that:
+	- Does not teach C++ or syntax
+	- Tackles the "why" of our codebase, as the "how" should be handled by reading the code and the comments
+	- Contains references to important resources such as drive algorithms or bullet drop calculation fundamentals
+	- Stores information that we have obtained through trial and error, such as the intricities of the scheduler, the quirks of the drive system GUI, etc.
+	- Links to our recorded training meetings as a reference for current and new members
+	The core concept is to prevent the loss of knowledge and make the transition of joining the team much easier. 
+Improve training meetings:
+	Topics should be:
+	- Setup computers
+	- Hardware review + referee system [30 minutes]
+	- robomasters overview (7v7, rmul stuff, etc.)  [show a match 10 minutes]
+	- Project structure [15 minutes]
+	- Taproot [10 minutes]
+	- Runtime (scheduler, commands, etc.) [40 minutes]
+	- basic compiling and pushing etc. [15 minutes]
+	- Github commands [5 minutes]
+	- Pipeline to Production (p2p) [30 minutes]
+	- Expectations and conventions for wiki and commenting (clang file) [10 minutes]
+New Features for Fall:
+	- Engineer Full Function
+	- Bullet Drop
+	- Standard, Hero, and Aerial CV
+	- Supercap codebase
+	- Custom GUI 
+	- Chassis Applied Torque Compensation
+	- Minimap implementation (ideally with fog of war, vision pings, and robot icons like the league minimap)
+	- Dart Codebase (if functional)
+	- Engineer CV for 6 axis arm
+New Github Hierarchy:
+	- Current Hierarchy: effectively, none. Whichever branch was worked on last gets merged into, and we use that branch for competition
+	- Concept: Instead of attempting to branch off of main for every robot and develop features on a robot-to-robot basis, instead base the branches off of projects.
+	- Diagram:
+			Production Branch (the "main" branch, always stable, no untested or experimental features, can be loaded at any point and will 100% work)
+				|
+				v
+			Integration Branch (the branch that we merge to and branch from, the candidate branch for production)
+		---------------- ----------------
+		v				v
+	Robot Branches			Feature Branches
+	(One for each robot, where 	(One for each new feature 
+	robot-specific changes are 	implemented that spans 
+	made [ex: hopper support 	multiple robots [ex: spin2win, 
+	for standard])			chassis applied torque 
+					compensation])
+
+	The general idea is that changes are separated into robot-specific branches, which can be merged upwards without having to test the other robots, and feature-specific branches, where changes must be tested on every affected system before the merge is accepted
+	To demonstrate, let us take that the engineer robot has new functionality being added, and that we are implementing an improved spin2win algorithm that dodges bullets better.
+		Before, the engineer team would work in the Engineer branch, while the spin2win team would work in a different branch, either a unique branch based on main or a robot-specific branch like standard.
+		When a team would finish, their code would be tested on their branch, then merged into the main, forcing every other team to rebase in order to merge, also changing the main branch and potentially causing a headache if later found out to be bugged.
+		Now, the engineer team would branch off of the integration branch with a robot branch, and the spin2win team would branch off of the integration branch with a feature branch. 
+		When either team finishes, they would merge into the integrations branch, which would be used to ensure that nothing implemented breaks any other features. Thereby, every time a team finishes, they "integrate" into the branch, and if they find that a conflict occurs, they can fix it without changing the main.
+		Once a cycle has passed, and there have been significant feature upgrades that are fully tested and confirmed to be stable, the integrations branch would be merged upwards.
+		This also prevents the implemented features from interfering with work done in the robot branches, so universal features are truly universal. 
